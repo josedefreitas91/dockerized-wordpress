@@ -43,8 +43,19 @@ services:
     volumes:
       - wordpress:/var/www/html
       - ./nginx-conf:/etc/nginx/conf.d
+      # - certbotdata:/etc/letsencrypt
     networks:
       - app-network
+
+  # certbot:
+  #   depends_on:
+  #     - webserver
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - certbotdata:/etc/letsencrypt
+  #     - wordpress:/var/www/html
+  #   command: certonly --webroot --webroot-path=/var/www/html --email admin@yamacoo.com --agree-tos --no-eff-email --force-renewal -d domain.com -d www.domain.com
 
   # phpmyadmin:
   #   image: phpmyadmin:latest
@@ -65,9 +76,25 @@ services:
     networks:
       - app-network
 
+  # ftp:
+  #   image: fauria/vsftpd
+  #   volumes:
+  #     - wordpress:/home/vsftpd
+  #     - ./vsftpd.passwd:/etc/vsftpd/vsftpd.passwd
+  #   ports:
+  #     - "20:20"
+  #     - "21:21"
+  #     - "21100-21110:21100-21110"
+  #   env_file: .env
+  #   environment:
+  #     - FTP_USER=$FTP_USER
+  #     - FTP_PASS=$FTP_PASS
+  #     - PASV_ADDRESS=$PASV_ADDRESS
+
 volumes:
   wordpress:
   dbdata:
+  # certbotdata:
 
 networks:
   app-network:
